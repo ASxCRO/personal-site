@@ -1,26 +1,17 @@
 import React from "react";
-import {
-  About,
-  Contact,
-  Experience,
-  Footer,
-  Header,
-  Nav,
-  Testimonials,
-} from "./components";
+import { About, Contact, Experience, Footer, Header, Nav } from "./components";
 
 const App = () => {
-  return (
-    <>
-      <Header />
-      <Nav />
-      <About />
-      <Experience />
-      <Testimonials />
-      <Contact />
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<Nav />
+			<About />
+			<Experience />
+			<Contact />
+			<Footer />
+		</>
+	);
 };
 
 export default App;
