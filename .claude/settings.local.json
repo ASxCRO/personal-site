@@ -4,7 +4,11 @@
       "Bash(find:*)",
       "Bash(npm install)",
       "Bash(npm run build:*)",
-      "Skill(frontend-design)"
+      "Skill(frontend-design)",
+      "WebFetch(domain:www.linkedin.com)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(findstr:*)"
     ]
   }
 }

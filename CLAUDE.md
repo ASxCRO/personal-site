@@ -1,9 +1,57 @@
+plugins:
+  - claude-code-plugin:frontend-design
+
 project:
 name: "antoniosupan.from.hr"
 description: "Personal blog and portfolio with blog, newsletter, optimized for performance and SEO"
 repository: "https://github.com/ASxCRO/personal-site"
 domain: "antoniosupan.from.hr"
 deploy: "Netlify"
+
+owner:
+  name: "Antonio Supan"
+  title: "Fullstack Engineer / .NET Developer"
+  linkedin: "https://www.linkedin.com/in/antonio-supan/"
+  github: "https://github.com/asxcro"
+  current_company: "Combis"
+  location: "Zagreb, Croatia"
+
+  education:
+    - institution: "Virovitica University of Applied Sciences"
+      years: "2018-2021"
+
+  certifications:
+    - name: "Essentials with Azure Fundamentals"
+      issuer: "Microsoft"
+      date: "June 2025"
+    - name: "Managing Azure Infrastructure: Storage, Monitoring & Backup"
+      issuer: "Microsoft"
+      date: "June 2025"
+    - name: "Secure & Scalable Cloud Infrastructure with Microsoft Azure"
+      issuer: "Microsoft"
+      date: "June 2025"
+    - name: "Agile Fundamentals"
+      issuer: "Pluralsight"
+      date: "September 2022"
+    - name: "Getting started with the Linux Command Line"
+      issuer: "Pluralsight"
+      date: "September 2022"
+    - name: "Microservices Architecture"
+      issuer: "Udemy"
+      date: "2021"
+
+  skills:
+    primary: [".NET", "C#", "ASP.NET Core", "Vue.js", "Azure"]
+    secondary: ["Microservices", "Docker", "SQL Server", "REST APIs", "Clean Architecture"]
+    cloud: ["Azure", "Azure Functions", "Azure Storage", "Azure DevOps"]
+
+  languages:
+    - language: "English"
+      level: "Full professional proficiency"
+    - language: "German"
+      level: "Elementary proficiency"
+
+  summary: "Passionate .NET Developer focused on building scalable, secure, and high-performance solutions. Engaged in technical content related to C#, cloud infrastructure, and modern development practices."
 
 stack:
 frontend:

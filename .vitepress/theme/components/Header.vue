@@ -29,7 +29,7 @@ onMounted(() => {
       <div class="header-text" :class="{ 'is-loaded': isLoaded }">
         <div class="eyebrow">
           <span class="status-dot"></span>
-          <span>Available for hire</span>
+          <span>.NET Developer @ Combis</span>
         </div>
 
         <h1 class="name">
