@@ -1,6 +1,6 @@
 ---
 title: "Understanding the ASP.NET Core Middleware Pipeline"
-date: 2025-01-10
+date: 2025-12-18
 description: "Deep dive into the ASP.NET Core middleware pipeline. Learn how requests flow through your application and how to build custom middleware for cross-cutting concerns."
 tags: [".NET", "ASP.NET Core", "Middleware", "Architecture"]
 author: "Antonio Supan"
@@ -13,6 +13,7 @@ The middleware pipeline is the backbone of ASP.NET Core's request processing. Ev
 ## How the Pipeline Works
 
 The middleware pipeline follows a Russian doll model. Each middleware:
+
 1. Can process the incoming request
 2. Can call the next middleware in the pipeline
 3. Can process the outgoing response

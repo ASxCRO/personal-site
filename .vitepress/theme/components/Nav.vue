@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute } from 'vitepress'
 
+const route = useRoute()
 const activeNav = ref('/')
 const isScrolled = ref(false)
 
@@ -12,8 +14,23 @@ const navItems = [
   { href: '/#contact', icon: 'mail', label: 'Contact' }
 ]
 
+const updateActiveFromRoute = () => {
+  const path = route.path
+  // Check if we're on the blog page or a blog post
+  if (path === '/blog' || path === '/blog/' || path.startsWith('/blog/')) {
+    activeNav.value = '/blog'
+    return true
+  }
+  return false
+}
+
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 100
+
+  // Don't update active nav based on scroll if not on home page
+  if (updateActiveFromRoute()) {
+    return
+  }
 
   const sections = ['about', 'experience', 'contact']
   const scrollY = window.scrollY + 200
@@ -35,7 +52,12 @@ const handleScroll = () => {
 }
 
 onMounted(() => {
+  updateActiveFromRoute()
   window.addEventListener('scroll', handleScroll)
+})
+
+watch(() => route.path, () => {
+  updateActiveFromRoute()
 })
 
 onUnmounted(() => {

@@ -1,13 +1,22 @@
 <script setup lang="ts">
 const jobs = [
   {
+    title: 'Software Developer',
+    company: 'Combis',
+    type: 'Full-time',
+    period: 'Nov 2025 - Present',
+    location: 'Zagreb, Croatia',
+    description: 'Building enterprise systems',
+    skills: ['D365', '.NET', 'Vue.js 3', 'Azure', 'Hangfire'],
+    current: true
+  },
+  {
     title: 'Developer',
     company: 'Axians Hrvatska',
     type: 'Full-time',
-    period: 'Jun 2024 - Present',
+    period: 'Jun 2024 - Oct 2025',
     location: 'Zagreb, Croatia',
-    skills: ['Azure DevOps', 'Microservices', 'ASP.NET', 'C#', 'Vue.js', 'Docker', 'RabbitMQ', 'Elasticsearch'],
-    current: true
+    skills: ['Azure DevOps', 'Microservices', 'ASP.NET', 'C#', 'Vue.js', 'Docker', 'RabbitMQ', 'Elasticsearch']
   },
   {
     title: 'Full Stack Engineer',

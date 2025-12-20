@@ -1,6 +1,6 @@
 ---
 title: "Minimal APIs in .NET: Best Practices and Patterns"
-date: 2025-01-05
+date: 2025-12-20
 description: "Learn how to build production-ready APIs using .NET Minimal APIs. Explore organization patterns, validation, error handling, and advanced features."
 tags: [".NET", "Minimal APIs", "REST", "Best Practices"]
 author: "Antonio Supan"

@@ -1,6 +1,6 @@
 ---
 title: "Dependency Injection in .NET: A Deep Dive"
-date: 2025-01-15
+date: 2025-12-19
 description: "Master the built-in dependency injection container in .NET. Learn about service lifetimes, advanced patterns, and best practices for building maintainable applications."
 tags: [".NET", "Dependency Injection", "Architecture", "Best Practices"]
 author: "Antonio Supan"
@@ -23,6 +23,7 @@ services.AddTransient<IEmailSender, SmtpEmailSender>();
 ```
 
 **When to use:**
+
 - Stateless services
 - Services that don't hold expensive resources
 - Services where each consumer needs a fresh instance
@@ -37,6 +38,7 @@ services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 ```
 
 **When to use:**
+
 - Database contexts (Entity Framework DbContext)
 - Services that should share state within a request
 - Unit of Work pattern implementations
@@ -51,6 +53,7 @@ services.AddSingleton<IConfiguration>(Configuration);
 ```
 
 **When to use:**
+
 - Caching services
 - Configuration objects
 - Thread-safe stateless services
@@ -73,6 +76,7 @@ public class MySingleton
 ```
 
 This leads to:
+
 - Disposed DbContext being reused
 - Memory leaks
 - Thread safety issues
@@ -192,6 +196,7 @@ builder.Host.UseDefaultServiceProvider(options =>
 ```
 
 This catches:
+
 - Missing service registrations
 - Captive dependencies
 - Scope validation issues
