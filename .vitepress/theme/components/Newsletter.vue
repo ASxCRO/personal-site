@@ -33,7 +33,6 @@ const subscribe = async () => {
 			Get the latest articles on .NET, software architecture, and development
 			best practices delivered to your inbox.
 		</p>
-		q
 
 		<form
 			@submit.prevent="subscribe"
