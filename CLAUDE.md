@@ -59,7 +59,7 @@ unit: "Vitest/Testing Library for Vue"
 integration:
 netlify:
 build_cmd: "vitepress build"
-publish_dir: "docs/.vitepress/dist"
+publish_dir: ".vitepress/dist"
 domain: "antoniosupan.from.hr"
 env: - name: "NETLIFY_SITE_ID" - name: "NETLIFY_AUTH_TOKEN"
 analytics:
