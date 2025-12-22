@@ -26,7 +26,7 @@ export default defineConfig({
 	],
 	cleanUrls: true,
 	sitemap: {
-		hostname: "https://antoniosupan.from.hr",
+		hostname: "https://antoniosupan.dev",
 	},
 	vite: {
 		plugins: [tailwindcss()],
