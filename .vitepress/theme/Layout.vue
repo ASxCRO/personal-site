@@ -10,7 +10,6 @@ const route = useRoute();
 
 // Check if current page is a blog post (in /blog/ directory and not the index)
 const isBlogPost = computed(() => {
-	console.log("Route Path:", route.path);
 	return route.path.startsWith("/blog/") && route.path !== "/blog/";
 });
 </script>
