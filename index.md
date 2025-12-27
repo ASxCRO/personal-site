@@ -8,6 +8,7 @@ layout: page
 import Header from './.vitepress/theme/components/Header.vue'
 import About from './.vitepress/theme/components/About.vue'
 import Experience from './.vitepress/theme/components/Experience.vue'
+import Testimonials from './.vitepress/theme/components/Testimonials.vue'
 import Contact from './.vitepress/theme/components/Contact.vue'
 import Newsletter from './.vitepress/theme/components/Newsletter.vue'
 </script>
@@ -15,6 +16,7 @@ import Newsletter from './.vitepress/theme/components/Newsletter.vue'
 <Header />
 <About />
 <Experience />
+<Testimonials />
 
 <section class="mt-32">
   <div class="container">
