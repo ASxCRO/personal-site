@@ -8,7 +8,12 @@
       "WebFetch(domain:www.linkedin.com)",
       "Bash(npm run dev:*)",
       "WebFetch(domain:localhost)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(git -C \"C:\\\\Users\\\\repiz\\\\Desktop\\\\personal-site\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\repiz\\\\Desktop\\\\personal-site\" log --oneline -5)",
+      "Bash(git -C \"C:\\\\Users\\\\repiz\\\\Desktop\\\\personal-site\" add blog/database-indexes-postgresql-mssql.md)",
+      "Bash(git -C \"C:\\\\Users\\\\repiz\\\\Desktop\\\\personal-site\" commit -m \"$\\(cat <<''EOF''\nAdd advanced database indexing blog post\n\nCovers PostgreSQL vs SQL Server indexes, clustered indexes, covering indexes, partial indexes, expression indexes, and EF Core integration for .NET developers.\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"C:\\\\Users\\\\repiz\\\\Desktop\\\\personal-site\" push)"
     ]
   }
 }
