@@ -1,26 +1,26 @@
 ---
 title: "TickerQ za Background Jobove u .NET-u: Detaljna Obrada s Primjerima"
 date: 2026-03-13
-description: "Detaljan prakticni vodic kroz TickerQ za background jobove u .NET-u: TimeTicker, CronTicker, retries, chaining, EF persistence i dashboard."
+description: "Detaljan praktični vodič kroz TickerQ za background jobove u .NET-u: TimeTicker, CronTicker, retries, chaining, EF persistence i dashboard."
 tags: [".NET", "TickerQ", "Background Jobs", "Scheduling", "Architecture"]
 author: "Antonio Supan"
 ---
 
 # TickerQ za Background Jobove u .NET-u: Detaljna Obrada s Primjerima
 
-TickerQ je moderni scheduler za .NET koji rjesava klasicne background scenarije: delayed execution, periodicke (cron) jobove, retry logiku i orchestration vise koraka.
+TickerQ je moderni scheduler za .NET koji rješava klasične background scenarije: delayed execution, periodičke (cron) jobove, retry logiku i orkestraciju više koraka.
 
-U ovom postu prolazimo kroz praktican setup i production pattern-e koje mozes odmah koristiti.
+U ovom postu prolazimo kroz praktičan setup i produkcijske patterne koje možeš odmah koristiti.
 
-## Zasto TickerQ
+## Zašto TickerQ
 
-Najvaznije karakteristike:
+Najvažnije karakteristike:
 
 - Reflection-free execution (source generator pristup)
 - `TimeTicker` za jednokratne/delayed jobove
-- `CronTicker` za periodicke jobove (6-part cron sa sekundama)
+- `CronTicker` za periodičke jobove (6-part cron sa sekundama)
 - Retry i status lifecycle out-of-the-box
-- Parent-child chaining za workflow-e
+- Parent-child chaining za workflowe
 - EF Core persistence i dashboard za observability
 
 ## 1. Instalacija i verzioniranje
@@ -31,7 +31,7 @@ TickerQ major verzija prati .NET major:
 - `TickerQ 9.x` za .NET 9
 - `TickerQ 10.x` za .NET 10
 
-Uvijek drzi sve TickerQ pakete na istom major/minor levelu (`TickerQ`, `TickerQ.EntityFrameworkCore`, `TickerQ.Dashboard`, itd.).
+Uvijek drži sve TickerQ pakete na istom major/minor levelu (`TickerQ`, `TickerQ.EntityFrameworkCore`, `TickerQ.Dashboard`, itd.).
 
 ```bash
 dotnet add package TickerQ --version 10.*
@@ -41,7 +41,7 @@ dotnet add package TickerQ.Dashboard --version 10.*
 
 ## 2. Osnovna konfiguracija (`Program.cs`)
 
-Minimalni setup je doslovno `AddTickerQ()` + `UseTickerQ()`, ali za realni projekt imas smisla odmah definirati scheduler opcije.
+Minimalni setup je doslovno `AddTickerQ()` + `UseTickerQ()`, ali za realni projekt ima smisla odmah definirati scheduler opcije.
 
 ```csharp
 using TickerQ.DependencyInjection;
@@ -123,7 +123,7 @@ public sealed class WelcomeEmailRequest
 
 ## 4. Primjer: jednokratni (TimeTicker) job
 
-Ovo je tipican delayed workflow, npr. "poslati welcome email 5 minuta nakon registracije".
+Ovo je tipičan delayed workflow, npr. "poslati welcome email 5 minuta nakon registracije".
 
 ```csharp
 using TickerQ.Utilities.Entities;
@@ -163,7 +163,7 @@ public class UserOnboardingService
 }
 ```
 
-## 5. Primjer: periodicki (CronTicker) job
+## 5. Primjer: periodički (CronTicker) job
 
 Cron u TickerQ koristi **6-part format** (sekunde su obavezne).
 
@@ -213,7 +213,7 @@ public async Task GenerateDailyReport(
 
 ## 6. Retry i error-handling pattern
 
-Praktican pattern je: domenski invalid input ne retry-as, transient error-e retry-as (`throw`).
+Praktičan pattern je: domenski neispravan input ne retryaš, transijentne error-e retryaš (`throw`).
 
 ```csharp
 [TickerFunction("ProcessPayment")]
@@ -228,19 +228,19 @@ public async Task ProcessPayment(
     catch (InvalidOperationException ex)
     {
         _logger.LogWarning(ex, "Business validation failed for order {OrderId}", context.Request.OrderId);
-        return; // zavrsi bez retrya
+        return; // završi bez retrya
     }
     catch (Exception ex)
     {
         _logger.LogError(ex, "Transient failure, retry count: {RetryCount}", context.RetryCount);
-        throw; // TickerQ ce odraditi retry po RetryIntervals
+        throw; // TickerQ će odraditi retry po RetryIntervals
     }
 }
 ```
 
 ## 7. Workflow orchestration (chaining)
 
-`TimeTicker` podrzava parent-child chain i `RunCondition` (npr. `OnSuccess`, `OnFailure`, `InProgress`).
+`TimeTicker` podržava parent-child chain i `RunCondition` (npr. `OnSuccess`, `OnFailure`, `InProgress`).
 
 ```csharp
 using TickerQ.Utilities.Entities;
@@ -276,29 +276,29 @@ Za kompleksnije grafove koristi `FluentChainTickerBuilder<TimeTickerEntity>`.
 
 ## 8. Timezone i produkcijski detalji
 
-Najcesce greske u produkciji:
+Najčešće greške u produkciji:
 
 - Nije pozvan `app.UseTickerQ()`
-- Mismatch imena funkcije izmedu `[TickerFunction("X")]` i `Function = "X"`
+- Mismatch imena funkcije između `[TickerFunction("X")]` i `Function = "X"`
 - Cron je u 5-part formatu umjesto 6-part
-- Nedefiniran timezone (onda dobijes neocekivana pokretanja tijekom DST promjena)
+- Nedefiniran timezone (onda dobiješ neočekivana pokretanja tijekom DST promjena)
 
 Preporuka:
 
-- Drzi `SchedulerTimeZone = TimeZoneInfo.Utc`
-- Postavi smislen `NodeIdentifier` u multi-node okruzenju
+- Drži `SchedulerTimeZone = TimeZoneInfo.Utc`
+- Postavi smislen `NodeIdentifier` u multi-node okruženju
 - Koristi dashboard i logove za status lifecycle (`Idle -> Queued -> InProgress -> Done/Failed/...`)
 - Uvedi redovni cleanup starih `TimeTicker` i `CronTickerOccurrence` zapisa
 
 ## 9. Kada koristiti TimeTicker, a kada CronTicker
 
 - `TimeTicker`: delayed one-off akcije (email nakon registracije, timeout cleanup, deferred processing)
-- `CronTicker`: periodicni batch/procesi (sync, maintenance, reports)
+- `CronTicker`: periodični batch/procesi (sync, maintenance, reports)
 
-Ako imas vise ovisnih koraka, idi na `TimeTicker` chain umjesto monolitnog "mega joba".
+Ako imaš više ovisnih koraka, idi na `TimeTicker` chain umjesto monolitnog "mega joba".
 
-## Zakljucak
+## Zaključak
 
-TickerQ je jak izbor kad zelis scheduler koji je blizak modernom .NET stacku: type-safe API, EF persistence, dashboard i dobar workflow model za business procese.
+TickerQ je jak izbor kad želiš scheduler koji je blizak modernom .NET stacku: type-safe API, EF persistence, dashboard i dobar workflow model za business procese.
 
-Ako tek uvodis background jobove, kreni s minimalnim setupom (`AddTickerQ` + `UseTickerQ`) i jednim `TimeTicker` scenarijem, pa postupno uvedi cron, retry strategije i chaining.
+Ako tek uvodiš background jobove, kreni s minimalnim setupom (`AddTickerQ` + `UseTickerQ`) i jednim `TimeTicker` scenarijem, pa postupno uvedi cron, retry strategije i chaining.
