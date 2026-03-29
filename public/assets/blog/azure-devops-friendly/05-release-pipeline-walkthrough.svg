@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .stage { fill: #1e293b; stroke: #475569; stroke-width: 2; rx: 14; }
+      .gate { fill: #422006; stroke: #f59e0b; stroke-width: 2; rx: 14; }
+      .prod { fill: #14532d; stroke: #22c55e; stroke-width: 2; rx: 14; }
+      .title { fill: #f8fafc; font: 700 42px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 22px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 23px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 19px Arial, sans-serif; }
+      .small { fill: #94a3b8; font: 500 17px Arial, sans-serif; }
+      .arrow { stroke: #94a3b8; stroke-width: 3; marker-end: url(#m); }
+    </style>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920"/>
+  <rect class="panel" x="40" y="40" width="1520" height="840"/>
+
+  <text class="title" x="80" y="110">Release Pipeline Walkthrough</text>
+  <text class="subtitle" x="80" y="150">What should happen from commit to production, in order</text>
+
+  <rect class="stage" x="90" y="250" width="230" height="140"/>
+  <text class="h" x="125" y="305">Build</text>
+  <text class="t" x="125" y="338">compile</text>
+  <text class="t" x="125" y="364">unit tests</text>
+
+  <rect class="stage" x="360" y="250" width="230" height="140"/>
+  <text class="h" x="390" y="305">Package</text>
+  <text class="t" x="390" y="338">publish</text>
+  <text class="t" x="390" y="364">artifact</text>
+
+  <rect class="stage" x="630" y="250" width="230" height="140"/>
+  <text class="h" x="665" y="305">Deploy Dev</text>
+  <text class="t" x="665" y="338">auto deploy</text>
+  <text class="t" x="665" y="364">smoke tests</text>
+
+  <rect class="stage" x="900" y="250" width="230" height="140"/>
+  <text class="h" x="930" y="305">Deploy UAT</text>
+  <text class="t" x="930" y="338">integration tests</text>
+  <text class="t" x="930" y="364">demo ready</text>
+
+  <rect class="gate" x="1170" y="250" width="180" height="140"/>
+  <text class="h" x="1205" y="305">Approval</text>
+  <text class="t" x="1205" y="338">release owner</text>
+  <text class="t" x="1205" y="364">change window</text>
+
+  <rect class="prod" x="1390" y="250" width="140" height="140"/>
+  <text class="h" x="1415" y="320">PROD</text>
+  <text class="t" x="1415" y="352">deploy</text>
+
+  <line class="arrow" x1="320" y1="320" x2="360" y2="320"/>
+  <line class="arrow" x1="590" y1="320" x2="630" y2="320"/>
+  <line class="arrow" x1="860" y1="320" x2="900" y2="320"/>
+  <line class="arrow" x1="1130" y1="320" x2="1170" y2="320"/>
+  <line class="arrow" x1="1350" y1="320" x2="1390" y2="320"/>
+
+  <rect class="stage" x="90" y="470" width="690" height="300"/>
+  <text class="h" x="130" y="525">Stage-level checks (keep them simple)</text>
+  <text class="t" x="130" y="565">- Build: fail fast on compile/test issues</text>
+  <text class="t" x="130" y="600">- Dev: smoke tests + quick API health checks</text>
+  <text class="t" x="130" y="635">- UAT: business validation and final acceptance</text>
+  <text class="t" x="130" y="670">- Prod: approval + monitoring + rollback plan</text>
+  <text class="small" x="130" y="720">Use one artifact ID through all stages for full traceability.</text>
+
+  <rect class="stage" x="820" y="470" width="710" height="300"/>
+  <text class="h" x="860" y="525">Where teams usually struggle</text>
+  <text class="t" x="860" y="565">- Deploying different builds to different environments</text>
+  <text class="t" x="860" y="600">- Skipping approvals during urgent releases</text>
+  <text class="t" x="860" y="635">- No rollback checklist when prod issues appear</text>
+  <text class="t" x="860" y="670">- Manual hotfixes outside pipeline visibility</text>
+  <text class="small" x="860" y="720">Fix: automate the boring parts, keep human approval only where risk is real.</text>
+</svg>

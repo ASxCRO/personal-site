@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .branch-main { stroke: #22c55e; stroke-width: 8; fill: none; }
+      .branch-dev { stroke: #38bdf8; stroke-width: 8; fill: none; }
+      .branch-feature { stroke: #c084fc; stroke-width: 6; fill: none; }
+      .branch-release { stroke: #f59e0b; stroke-width: 6; fill: none; }
+      .branch-hotfix { stroke: #ef4444; stroke-width: 6; fill: none; }
+      .tag { fill: #1e293b; stroke: #475569; stroke-width: 2; rx: 10; }
+      .title { fill: #f8fafc; font: 700 42px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 22px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 22px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 19px Arial, sans-serif; }
+      .small { fill: #94a3b8; font: 500 17px Arial, sans-serif; }
+      .arrow { stroke: #94a3b8; stroke-width: 3; marker-end: url(#m); }
+    </style>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920"/>
+  <rect class="panel" x="40" y="40" width="1520" height="840"/>
+
+  <text class="title" x="80" y="110">Git Flow for Real Projects</text>
+  <text class="subtitle" x="80" y="150">Who merges where, and what gets deployed</text>
+
+  <path class="branch-main" d="M120 720 L1480 720"/>
+  <text class="h" x="120" y="760">main (production)</text>
+
+  <path class="branch-dev" d="M120 560 L1480 560"/>
+  <text class="h" x="120" y="600">develop (integration)</text>
+
+  <path class="branch-feature" d="M260 560 C340 480, 420 480, 500 560"/>
+  <text class="t" x="320" y="470">feature/login-ui</text>
+
+  <path class="branch-feature" d="M580 560 C660 470, 760 470, 840 560"/>
+  <text class="t" x="650" y="460">feature/invoice-api</text>
+
+  <path class="branch-release" d="M980 560 C1060 500, 1160 500, 1240 560"/>
+  <path class="branch-release" d="M1240 560 C1280 610, 1320 650, 1360 720"/>
+  <path class="branch-release" d="M1360 720 C1320 680, 1280 640, 1240 560"/>
+  <text class="t" x="1040" y="485">release/1.8.0</text>
+
+  <path class="branch-hotfix" d="M1130 720 C1180 640, 1240 640, 1290 720"/>
+  <path class="branch-hotfix" d="M1240 680 C1200 620, 1170 600, 1140 560"/>
+  <text class="t" x="1160" y="635">hotfix/payment-timeout</text>
+
+  <rect class="tag" x="90" y="220" width="700" height="250"/>
+  <text class="h" x="130" y="270">Deployment mapping (easy rule set)</text>
+  <text class="t" x="130" y="310">- feature/* -> CI checks only</text>
+  <text class="t" x="130" y="345">- develop -> auto deploy to DEV/TEST</text>
+  <text class="t" x="130" y="380">- release/* -> deploy to UAT/STAGING</text>
+  <text class="t" x="130" y="415">- main -> production deployment with approval</text>
+
+  <rect class="tag" x="830" y="220" width="700" height="250"/>
+  <text class="h" x="870" y="270">Common confusion to avoid</text>
+  <text class="t" x="870" y="310">- Do not add new features to release/*</text>
+  <text class="t" x="870" y="345">- Always merge release back to develop</text>
+  <text class="t" x="870" y="380">- Hotfix must return to both main and develop</text>
+  <text class="small" x="870" y="430">This prevents "works in prod but missing in develop" situations.</text>
+
+  <line class="arrow" x1="500" y1="540" x2="500" y2="565"/>
+  <line class="arrow" x1="840" y1="540" x2="840" y2="565"/>
+  <line class="arrow" x1="1360" y1="700" x2="1360" y2="725"/>
+</svg>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .box { fill: #1e293b; stroke: #475569; stroke-width: 2; rx: 14; }
+      .box-accent { fill: #0f766e; stroke: #14b8a6; stroke-width: 2; rx: 14; }
+      .box-warn { fill: #78350f; stroke: #f59e0b; stroke-width: 2; rx: 14; }
+      .title { fill: #f8fafc; font: 700 44px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 24px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 24px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 20px Arial, sans-serif; }
+      .small { fill: #94a3b8; font: 500 18px Arial, sans-serif; }
+      .arrow { stroke: #94a3b8; stroke-width: 4; marker-end: url(#m); }
+      .ok { fill: #86efac; font: 700 18px Arial, sans-serif; }
+      .stop { fill: #fcd34d; font: 700 18px Arial, sans-serif; }
+    </style>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920" />
+  <rect class="panel" x="40" y="40" width="1520" height="840" />
+
+  <text class="title" x="80" y="110">CI/CD Journey at a Glance</text>
+  <text class="subtitle" x="80" y="150">A simple flow you can explain to the whole team in 2 minutes</text>
+
+  <rect class="box" x="80" y="230" width="200" height="120" rx="14"/>
+  <text class="h" x="110" y="280">1. Push</text>
+  <text class="t" x="110" y="312">feature/* or</text>
+  <text class="t" x="110" y="338">develop branch</text>
+
+  <rect class="box" x="330" y="230" width="200" height="120" rx="14"/>
+  <text class="h" x="360" y="280">2. PR Check</text>
+  <text class="t" x="360" y="312">lint + unit tests</text>
+  <text class="t" x="360" y="338">code review</text>
+
+  <rect class="box-accent" x="580" y="230" width="220" height="120" rx="14"/>
+  <text class="h" x="615" y="280">3. Build</text>
+  <text class="t" x="615" y="312">restore, build, test</text>
+  <text class="t" x="615" y="338">publish artifact</text>
+
+  <rect class="box" x="850" y="230" width="200" height="120" rx="14"/>
+  <text class="h" x="875" y="280">4. Artifact</text>
+  <text class="t" x="875" y="312">immutable package</text>
+  <text class="t" x="875" y="338">same for all envs</text>
+
+  <rect class="box" x="1100" y="230" width="180" height="120" rx="14"/>
+  <text class="h" x="1130" y="280">5. Dev</text>
+  <text class="t" x="1130" y="312">auto deploy</text>
+  <text class="t" x="1130" y="338">smoke test</text>
+
+  <rect class="box" x="1320" y="230" width="180" height="120" rx="14"/>
+  <text class="h" x="1350" y="280">6. UAT</text>
+  <text class="t" x="1350" y="312">QA sign-off</text>
+  <text class="t" x="1350" y="338">business check</text>
+
+  <line class="arrow" x1="280" y1="290" x2="330" y2="290"/>
+  <line class="arrow" x1="530" y1="290" x2="580" y2="290"/>
+  <line class="arrow" x1="800" y1="290" x2="850" y2="290"/>
+  <line class="arrow" x1="1050" y1="290" x2="1100" y2="290"/>
+  <line class="arrow" x1="1280" y1="290" x2="1320" y2="290"/>
+
+  <rect class="box-accent" x="570" y="500" width="300" height="140" rx="14"/>
+  <text class="h" x="620" y="556">7. Production</text>
+  <text class="t" x="620" y="590">manual approval gate</text>
+  <text class="t" x="620" y="620">deploy + health checks</text>
+
+  <line class="arrow" x1="1410" y1="350" x2="1410" y2="560"/>
+  <line class="arrow" x1="1410" y1="560" x2="870" y2="560"/>
+
+  <rect class="box-warn" x="80" y="500" width="430" height="160" rx="14"/>
+  <text class="h" x="120" y="555">Failure path (important)</text>
+  <text class="t" x="120" y="590">If build or tests fail, stop the pipeline here.</text>
+  <text class="t" x="120" y="620">Fix fast. Do not deploy partial fixes manually.</text>
+  <text class="stop" x="120" y="648">Rule: no green build, no release.</text>
+
+  <rect class="box" x="930" y="500" width="570" height="220" rx="14"/>
+  <text class="h" x="970" y="555">What makes this beginner-friendly?</text>
+  <text class="t" x="970" y="590">- One artifact from one build</text>
+  <text class="t" x="970" y="622">- Clear approval point before production</text>
+  <text class="t" x="970" y="654">- Same steps every time (less stress on release day)</text>
+  <text class="ok" x="970" y="694">Outcome: predictable deployments, fewer surprises.</text>
+
+  <text class="small" x="80" y="815">Tip: Start with this exact flow, then add extra checks only when the team is ready.</text>
+</svg>

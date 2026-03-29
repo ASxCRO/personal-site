@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .step { fill: #1e293b; stroke: #475569; stroke-width: 2; rx: 16; }
+      .title { fill: #f8fafc; font: 700 42px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 23px Arial, sans-serif; }
+      .num { fill: #22c55e; font: 700 34px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 24px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 20px Arial, sans-serif; }
+      .code { fill: #93c5fd; font: 500 18px 'Courier New', monospace; }
+      .arrow { stroke: #94a3b8; stroke-width: 3; marker-end: url(#m); }
+    </style>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920"/>
+  <rect class="panel" x="40" y="40" width="1520" height="840"/>
+
+  <text class="title" x="80" y="110">Self-Hosted Agent Setup (Step by Step)</text>
+  <text class="subtitle" x="80" y="150">A calm checklist for first-time setup</text>
+
+  <rect class="step" x="80" y="220" width="450" height="160"/>
+  <text class="num" x="110" y="280">1</text>
+  <text class="h" x="165" y="278">Create agent pool</text>
+  <text class="t" x="165" y="314">Project Settings -> Agent pools -> Add pool</text>
+  <text class="t" x="165" y="344">Name example: SelfHosted-Build</text>
+
+  <rect class="step" x="575" y="220" width="450" height="160"/>
+  <text class="num" x="605" y="280">2</text>
+  <text class="h" x="660" y="278">Create PAT token</text>
+  <text class="t" x="660" y="314">Scope: Agent Pools (Read, manage)</text>
+  <text class="t" x="660" y="344">Keep short expiration and rotate it</text>
+
+  <rect class="step" x="1070" y="220" width="450" height="160"/>
+  <text class="num" x="1100" y="280">3</text>
+  <text class="h" x="1155" y="278">Install agent files</text>
+  <text class="t" x="1155" y="314">Download package from Azure DevOps</text>
+  <text class="t" x="1155" y="344">Extract to C:\azagent or ~/azagent</text>
+
+  <rect class="step" x="80" y="430" width="450" height="170"/>
+  <text class="num" x="110" y="492">4</text>
+  <text class="h" x="165" y="490">Configure agent</text>
+  <text class="code" x="165" y="528">Windows: .\config.cmd</text>
+  <text class="code" x="165" y="556">Linux:   ./config.sh</text>
+  <text class="t" x="165" y="584">Connect to pool and set agent name</text>
+
+  <rect class="step" x="575" y="430" width="450" height="170"/>
+  <text class="num" x="605" y="492">5</text>
+  <text class="h" x="660" y="490">Run as service</text>
+  <text class="code" x="660" y="528">Windows: .\run.cmd</text>
+  <text class="code" x="660" y="556">Linux:   ./svc.sh install + start</text>
+  <text class="t" x="660" y="584">Use dedicated service account</text>
+
+  <rect class="step" x="1070" y="430" width="450" height="170"/>
+  <text class="num" x="1100" y="492">6</text>
+  <text class="h" x="1155" y="490">Validate and harden</text>
+  <text class="t" x="1155" y="528">Check capabilities: dotnet, docker, node</text>
+  <text class="t" x="1155" y="556">Patch OS, monitor disk, clean workspace</text>
+  <text class="t" x="1155" y="584">Add health check pipeline</text>
+
+  <line class="arrow" x1="530" y1="300" x2="575" y2="300"/>
+  <line class="arrow" x1="1025" y1="300" x2="1070" y2="300"/>
+  <line class="arrow" x1="1295" y1="380" x2="1295" y2="430"/>
+  <line class="arrow" x1="1070" y1="515" x2="1025" y2="515"/>
+  <line class="arrow" x1="575" y1="515" x2="530" y2="515"/>
+
+  <rect class="step" x="80" y="670" width="1440" height="150"/>
+  <text class="h" x="120" y="730">Quick troubleshooting</text>
+  <text class="t" x="120" y="766">- Agent offline: check service status and token expiration</text>
+  <text class="t" x="120" y="796">- Job stuck in queue: pool has no compatible agent demands</text>
+</svg>

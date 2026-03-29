@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .card { fill: #1e293b; stroke: #475569; stroke-width: 2; rx: 16; }
+      .left { fill: #0c4a6e; stroke: #38bdf8; stroke-width: 2; }
+      .right { fill: #3f3f46; stroke: #a1a1aa; stroke-width: 2; }
+      .title { fill: #f8fafc; font: 700 44px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 24px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 28px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 21px Arial, sans-serif; }
+      .good { fill: #86efac; font: 700 20px Arial, sans-serif; }
+      .warn { fill: #fcd34d; font: 700 20px Arial, sans-serif; }
+      .small { fill: #94a3b8; font: 500 18px Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920"/>
+  <rect class="panel" x="40" y="40" width="1520" height="840"/>
+
+  <text class="title" x="80" y="110">Choose the Right Agent (Without Overthinking)</text>
+  <text class="subtitle" x="80" y="150">Hosted and self-hosted can both be correct. Pick based on your reality.</text>
+
+  <rect class="card left" x="90" y="220" width="680" height="600" rx="16"/>
+  <text class="h" x="130" y="285">Microsoft-hosted agent</text>
+  <text class="t" x="130" y="335">Best when you want speed and zero maintenance.</text>
+  <text class="t" x="130" y="385">- No patching agent machines</text>
+  <text class="t" x="130" y="425">- Great for standard .NET, Node, Java builds</text>
+  <text class="t" x="130" y="465">- Easy starting point for small teams</text>
+  <text class="t" x="130" y="525">Typical use:</text>
+  <text class="t" x="130" y="560">"We are building APIs and web apps, all cloud-based."</text>
+  <text class="good" x="130" y="640">Choose this first unless you have a hard constraint.</text>
+
+  <rect class="card right" x="830" y="220" width="680" height="600" rx="16"/>
+  <text class="h" x="870" y="285">Self-hosted agent</text>
+  <text class="t" x="870" y="335">Best when you need private network access or custom tools.</text>
+  <text class="t" x="870" y="385">- Access internal servers and databases</text>
+  <text class="t" x="870" y="425">- Use licensed software and custom SDKs</text>
+  <text class="t" x="870" y="465">- Keep stronger control over security boundaries</text>
+  <text class="t" x="870" y="525">Typical use:</text>
+  <text class="t" x="870" y="560">"Our release needs on-prem API + internal package feed."</text>
+  <text class="warn" x="870" y="640">Use it when needed, but plan maintenance from day one.</text>
+
+  <rect class="card" x="90" y="760" width="1420" height="80" rx="14"/>
+  <text class="small" x="130" y="810">Practical rule: hybrid setup is common -> hosted for CI, self-hosted for private deployments.</text>
+</svg>

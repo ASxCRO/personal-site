@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .panel { fill: #111827; stroke: #334155; stroke-width: 2; rx: 18; }
+      .zone-a { fill: #1f2937; stroke: #475569; stroke-width: 2; }
+      .zone-b { fill: #1e3a8a; stroke: #60a5fa; stroke-width: 2; }
+      .zone-c { fill: #3f3f46; stroke: #a1a1aa; stroke-width: 2; }
+      .node { fill: #0b1220; stroke: #64748b; stroke-width: 2; rx: 12; }
+      .title { fill: #f8fafc; font: 700 42px Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 500 22px Arial, sans-serif; }
+      .h { fill: #e2e8f0; font: 700 22px Arial, sans-serif; }
+      .t { fill: #cbd5e1; font: 500 19px Arial, sans-serif; }
+      .small { fill: #94a3b8; font: 500 17px Arial, sans-serif; }
+      .arrow { stroke: #94a3b8; stroke-width: 3; marker-end: url(#m); }
+    </style>
+    <marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="920"/>
+  <rect class="panel" x="40" y="40" width="1520" height="840"/>
+
+  <text class="title" x="80" y="110">On-Prem Azure DevOps: Friendly Topology</text>
+  <text class="subtitle" x="80" y="150">Simple architecture that scales without chaos</text>
+
+  <rect class="zone-a" x="80" y="220" width="460" height="560" rx="16"/>
+  <text class="h" x="110" y="260">Zone 1: Core Services</text>
+  <rect class="node" x="110" y="300" width="400" height="130"/>
+  <text class="h" x="140" y="350">Azure DevOps Server</text>
+  <text class="t" x="140" y="385">Repos, pipelines, boards</text>
+  <rect class="node" x="110" y="460" width="400" height="130"/>
+  <text class="h" x="140" y="510">SQL Server</text>
+  <text class="t" x="140" y="545">Collections + backups + maintenance plans</text>
+  <text class="small" x="110" y="640">Keep these systems in protected internal network.</text>
+
+  <rect class="zone-b" x="570" y="220" width="460" height="560" rx="16"/>
+  <text class="h" x="600" y="260">Zone 2: Build/Deploy Agents</text>
+  <rect class="node" x="600" y="300" width="400" height="120"/>
+  <text class="h" x="630" y="347">Pool: Build</text>
+  <text class="t" x="630" y="378">Compile, test, package</text>
+  <rect class="node" x="600" y="450" width="400" height="120"/>
+  <text class="h" x="630" y="497">Pool: DevDeploy / UAT</text>
+  <text class="t" x="630" y="528">Safe deployments to non-prod</text>
+  <rect class="node" x="600" y="600" width="400" height="120"/>
+  <text class="h" x="630" y="647">Pool: ProdDeploy</text>
+  <text class="t" x="630" y="678">Restricted access + approvals</text>
+
+  <rect class="zone-c" x="1060" y="220" width="460" height="560" rx="16"/>
+  <text class="h" x="1090" y="260">Zone 3: Target Environments</text>
+  <rect class="node" x="1090" y="300" width="400" height="110"/>
+  <text class="h" x="1120" y="347">DEV / TEST</text>
+  <rect class="node" x="1090" y="445" width="400" height="110"/>
+  <text class="h" x="1120" y="492">UAT / STAGING</text>
+  <rect class="node" x="1090" y="590" width="400" height="110"/>
+  <text class="h" x="1120" y="637">PRODUCTION</text>
+
+  <line class="arrow" x1="510" y1="365" x2="600" y2="365"/>
+  <line class="arrow" x1="1000" y1="360" x2="1090" y2="355"/>
+  <line class="arrow" x1="1000" y1="510" x2="1090" y2="500"/>
+  <line class="arrow" x1="1000" y1="660" x2="1090" y2="645"/>
+
+  <text class="small" x="80" y="840">Security tip: keep production deploy agents isolated from build agents.</text>
+</svg>
