@@ -66,6 +66,9 @@ stages:
 
 Keep CI fast. If CI is slow, developers stop trusting it.
 
+![Azure DevOps Pipelines overview](/assets/blog/azure-devops/pipelines-overview.png)
+*Azure DevOps Pipelines overview screen. Source: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops).*
+
 ## Agent Strategy: Microsoft-Hosted vs Self-Hosted
 
 You have two main options.
@@ -83,6 +86,9 @@ Use self-hosted agents when:
 - You want more control over security and performance
 
 Many teams use a hybrid model.
+
+![Azure DevOps add agent pool screen](/assets/blog/azure-devops/create-agent-pool.png)
+*Project Settings -> Agent pools -> Add pool. Source: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/scale-set-agents?view=azure-devops).*
 
 ## Installing a Self-Hosted Agent
 
@@ -202,6 +208,12 @@ stages:
 
 Use Azure DevOps Environments for approvals and deployment history.
 
+![Azure DevOps pipeline run summary with stages](/assets/blog/azure-devops/pipeline-run-summary.png)
+*Pipeline run summary (stages, artifacts, and run details). Source: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops).*
+
+![Azure DevOps approvals and checks in environment settings](/assets/blog/azure-devops/approvals-and-checks.png)
+*Environment approvals and checks configuration. Source: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops).*
+
 ## Git Flow in Real-World Development
 
 Git Flow works well when you need clear release and hotfix paths.
@@ -229,6 +241,9 @@ Pipeline mapping:
 - Auto deploy to dev/test from `develop`
 - Deploy `release/*` to staging/UAT
 - Deploy `main` to production with approval
+
+![Azure DevOps branch control check settings](/assets/blog/azure-devops/branch-control-check.png)
+*Branch control check used to restrict allowed branches for deployments. Source: [Microsoft Learn](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops).*
 
 ## Common Mistakes
 
