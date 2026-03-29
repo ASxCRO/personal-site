@@ -1,27 +1,27 @@
 ---
 title: "Azure DevOps Practices: CI/CD, Agents, On-Prem Setups, and Git Flow"
 date: 2026-03-29
-description: "Practical Azure DevOps guide covering CI/CD pipelines, self-hosted agent setup, on-premises considerations, release workflows, and Git Flow usage in real teams."
+description: "Simple, practical Azure DevOps guide for CI/CD, self-hosted agents, on-prem setups, build and release pipelines, and Git Flow."
 tags: ["Azure DevOps", "CI/CD", "Git Flow", "DevOps"]
 author: "Antonio Supan"
 ---
 
 # Azure DevOps Practices: CI/CD, Agents, On-Prem Setups, and Git Flow
 
-Azure DevOps can scale from a small product team to enterprise delivery across multiple environments. The difference between a setup that "works" and one that stays reliable under pressure usually comes down to a few practical decisions: pipeline structure, agent strategy, release controls, and branch workflow discipline.
+Azure DevOps is easier to manage when a few core things are clear: how you build, how you deploy, where agents run, and how your team uses branches.
 
-This guide focuses on battle-tested practices you can apply immediately, with examples for CI/CD, self-hosted agents, on-premises scenarios, and Git Flow in day-to-day development.
+This post is a practical overview you can apply right away. We keep it simple and focused on real workflows.
 
-## Start with a Practical CI/CD Baseline
+## Start with a Simple CI/CD Baseline
 
-A good baseline pipeline should do four things consistently:
+A good CI pipeline should always:
 
 1. Build the application
-2. Run fast validation (tests, linting, static checks)
-3. Publish versioned artifacts
-4. Make deployments repeatable across environments
+2. Run tests
+3. Publish an artifact
+4. Reuse the same artifact for deployments
 
-Here is a minimal multi-stage YAML pipeline for a .NET service:
+Example YAML:
 
 ```yaml
 trigger:
@@ -32,12 +32,6 @@ trigger:
       - release/*
       - hotfix/*
 
-pr:
-  branches:
-    include:
-      - develop
-      - main
-
 pool:
   vmImage: "ubuntu-latest"
 
@@ -46,7 +40,6 @@ variables:
 
 stages:
   - stage: BuildAndTest
-    displayName: "Build and Test"
     jobs:
       - job: Build
         steps:
@@ -61,7 +54,7 @@ stages:
           - script: dotnet build --configuration $(buildConfiguration) --no-restore
             displayName: "Build"
 
-          - script: dotnet test --configuration $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
+          - script: dotnet test --configuration $(buildConfiguration) --no-build
             displayName: "Test"
 
           - script: dotnet publish src/MyApi/MyApi.csproj -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/app
@@ -71,49 +64,38 @@ stages:
             artifact: "app"
 ```
 
-This gives you a reliable CI foundation before adding deployment complexity.
+Keep CI fast. If CI is slow, developers stop trusting it.
 
 ## Agent Strategy: Microsoft-Hosted vs Self-Hosted
 
-Azure DevOps agent strategy should be intentional, not accidental.
+You have two main options.
 
 Use Microsoft-hosted agents when:
 
-- You want zero maintenance overhead
-- Your build dependencies are standard
+- You want minimal maintenance
+- You use standard tools
 - You do not need private network access
 
 Use self-hosted agents when:
 
-- You need access to private on-prem resources
-- You depend on licensed tools or custom SDKs
-- You need predictable performance and warm caches
-- You must control security boundaries tightly
+- You need access to internal servers
+- You need custom tools or licensed software
+- You want more control over security and performance
 
-In most enterprise setups, you end up with a hybrid model: Microsoft-hosted for generic workloads, self-hosted for internal systems and regulated environments.
+Many teams use a hybrid model.
 
 ## Installing a Self-Hosted Agent
 
 ### Windows Agent Example
 
 ```powershell
-# Run in an elevated PowerShell session
 mkdir C:\azagent
 cd C:\azagent
 
-# Download from Azure DevOps agent pool page
-# Example file name may differ by version
 Invoke-WebRequest -Uri https://vstsagentpackage.azureedge.net/agent/4.255.0/vsts-agent-win-x64-4.255.0.zip -OutFile agent.zip
 Expand-Archive -Path .\agent.zip -DestinationPath .
 
 .\config.cmd
-# Select:
-# 1) Azure DevOps URL
-# 2) PAT with Agent Pools (Read, manage)
-# 3) Agent pool name
-# 4) Agent name and work folder
-# 5) Run as service (recommended)
-
 .\run.cmd
 ```
 
@@ -125,25 +107,23 @@ curl -fkSL -o agent.tar.gz https://vstsagentpackage.azureedge.net/agent/4.255.0/
 tar zxvf agent.tar.gz
 
 ./config.sh
-# Provide Azure DevOps URL, PAT, pool and agent name
-
 sudo ./svc.sh install
 sudo ./svc.sh start
 ```
 
-The installation itself is easy. Production quality comes from how you configure pools, permissions, and maintenance.
+Installation is straightforward. Reliability comes from good pool and permission setup.
 
-## Agent Configuration That Works in Production
+## Agent Configuration Basics
 
-Focus on these practices:
+Focus on these rules:
 
-- Create dedicated pools per environment or trust boundary (for example `Build`, `DevDeploy`, `ProdDeploy`)
-- Use least-privilege service accounts for agent runtime
-- Keep tool versions explicit in pipeline tasks (`UseDotNet`, `NodeTool`, etc.)
-- Rotate PAT tokens and prefer short-lived credentials where possible
-- Patch and update agents regularly to avoid surprise failures
+- Separate pools by purpose (`Build`, `DevDeploy`, `ProdDeploy`)
+- Use least-privilege service accounts
+- Pin tool versions in pipelines
+- Rotate credentials
+- Update agents regularly
 
-Use demands and capabilities when workloads require specific tooling:
+Use demands when tooling differs:
 
 ```yaml
 pool:
@@ -154,34 +134,34 @@ pool:
     - docker
 ```
 
-This prevents jobs from landing on incompatible machines.
+This avoids jobs landing on the wrong machine.
 
 ## On-Premises Azure DevOps Server Considerations
 
-For on-premises (Azure DevOps Server), design for network reality first.
+If you run Azure DevOps Server on-prem, keep the architecture simple.
 
-Typical pattern:
+Typical setup:
 
-1. Azure DevOps Server hosted in internal infrastructure
-2. SQL Server on dedicated, backed-up storage
-3. Self-hosted agents deployed close to target systems
-4. Segmented pools for non-prod and prod
+1. Azure DevOps Server in internal infrastructure
+2. SQL Server with backups
+3. Self-hosted agents close to target systems
+4. Separate non-prod and prod pools
 
 Key recommendations:
 
-- Keep agents inside the same network zone as deployment targets
-- Avoid opening broad inbound firewall rules just for deployment convenience
-- Externalize secrets to a managed vault solution where possible
-- Define backup and restore drills for both Azure DevOps Server and SQL databases
-- Document collection/project topology early to avoid later migration pain
+- Keep agents in the same network zone as deployment targets
+- Avoid broad firewall openings
+- Store secrets in a vault
+- Test backup and restore
+- Document topology early
 
-If your builds require internal package feeds, artifact repositories, or legacy systems, on-prem agents usually provide the cleanest and most stable route.
+On-prem agents are usually best for strict security and legacy integrations.
 
 ## Build and Release Pipeline Design
 
-A common anti-pattern is mixing every concern in a single pipeline stage. Separate concerns by stage and environment.
+Do not mix everything in one stage. Split build and deploy.
 
-Example deployment stages with branch-based controls:
+Simple staged example:
 
 ```yaml
 stages:
@@ -220,63 +200,59 @@ stages:
                 - script: echo "Deploy to PROD"
 ```
 
-Use Azure DevOps Environments for approval gates, deployment history, and traceability. That gives release confidence without hiding logic in manual runbooks.
+Use Azure DevOps Environments for approvals and deployment history.
 
 ## Git Flow in Real-World Development
 
-Git Flow still works well in teams that need formal release cycles and predictable hotfix handling.
+Git Flow works well when you need clear release and hotfix paths.
 
-Typical branch roles:
+Branch roles:
 
-- `main`: production-ready code
-- `develop`: integration branch for upcoming release
-- `feature/*`: isolated feature work
-- `release/*`: stabilization before production cut
-- `hotfix/*`: urgent fixes from production incidents
+- `main`: production
+- `develop`: integration for next release
+- `feature/*`: feature work
+- `release/*`: stabilization
+- `hotfix/*`: urgent production fixes
 
-Practical workflow:
+Simple workflow:
 
-1. Developers branch from `develop` into `feature/*`
-2. Pull requests validate into `develop` with CI checks
-3. Release prep starts by creating `release/*` from `develop`
-4. Only fixes go into `release/*` during stabilization
-5. Release merges into `main` and back into `develop`
-6. Hotfixes branch from `main`, then merge into both `main` and `develop`
+1. Create `feature/*` from `develop`
+2. Merge to `develop` through PR and CI
+3. Create `release/*` from `develop`
+4. Keep release branch for bug fixes only
+5. Merge release into `main` and back into `develop`
+6. Create hotfix from `main`, then merge to both `main` and `develop`
 
-Pipeline mapping that works:
+Pipeline mapping:
 
-- CI pipeline on `feature/*`, `develop`, `release/*`, `hotfix/*`
-- Automatic deployment to shared dev/test from `develop`
-- Candidate deployment from `release/*` to staging/UAT
-- Production deployment from `main` with approvals
+- CI on `feature/*`, `develop`, `release/*`, `hotfix/*`
+- Auto deploy to dev/test from `develop`
+- Deploy `release/*` to staging/UAT
+- Deploy `main` to production with approval
 
-This model gives teams structure while still enabling fast incident response.
+## Common Mistakes
 
-## Common Failure Modes
+- Slow pipelines
+- Dirty shared agents
+- New features added to release branches
+- Manual deploy steps outside pipelines
+- No rollback plan
 
-Teams usually hit the same issues:
-
-- Long-running pipelines because every job runs on every branch
-- Shared self-hosted agents accumulating stale state
-- Release branches carrying new features instead of only stabilization fixes
-- Manual deployment steps outside pipeline traceability
-- Missing rollback strategy for production releases
-
-Most of these are process problems, not tooling limitations.
+Most of these are process issues, not tooling limits.
 
 ## Best Practices Summary
 
-1. Keep CI fast and deterministic; fail early on compile/test quality gates.
-2. Publish immutable artifacts and deploy the same artifact across environments.
-3. Use self-hosted agents only when network, compliance, or tooling requires them.
-4. Separate agent pools by trust boundary and environment.
-5. Model deployments as staged YAML pipelines with approvals in Environments.
-6. Map Git Flow branches to clear deployment targets and policies.
-7. Keep release branches focused on stabilization, not scope growth.
-8. Treat rollback and incident hotfix flow as first-class pipeline scenarios.
+1. Keep CI fast and stable.
+2. Build once, deploy same artifact everywhere.
+3. Use self-hosted agents only when needed.
+4. Separate pools by environment and trust level.
+5. Use staged pipelines and approvals for production.
+6. Keep Git Flow rules simple and consistent.
+7. Keep release branches focused on stabilization.
+8. Always have a rollback path.
 
 ## Conclusion
 
-Azure DevOps becomes significantly easier to operate when pipeline design, agent strategy, and branch workflow are aligned from the start. You do not need a complex setup on day one, but you do need consistency.
+Azure DevOps does not need to be complex. Start with a clean CI baseline, add controlled deployments, and use a branch strategy your team can follow every day.
 
-Start with a clean CI baseline, add staged deployments, and formalize Git Flow rules your team actually follows. From there, self-hosted agents and on-prem patterns become a controlled extension of the same delivery model, not a separate world.
+If these basics are consistent, scaling to self-hosted agents and on-prem setups becomes much easier.
