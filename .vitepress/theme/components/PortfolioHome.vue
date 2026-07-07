@@ -26,9 +26,15 @@ const jobs = [
 	{
 		period: "Oct 2025 - Present",
 		company: "COMBIS d.o.o.",
-		title: "Software Engineer / AI & Automation Lead",
+		title: "Software Engineer / AI & Automation Developer",
 		body: "Lead delivery across projects for Osijek Kindergartens, CARNET, Croatian Customs Administration, Croatian Telecom, Altpro, APIS IT / APIS Centre, Zagreb City Housing, Coca-Cola HBC and Atlantic Group.",
-		tags: [".NET APIs", "Azure DevOps", "AI automation", "Integrations", "Production support"],
+		tags: [
+			".NET APIs",
+			"Azure DevOps",
+			"AI automation",
+			"Integrations",
+			"Production support",
+		],
 		current: true,
 	},
 	{
@@ -88,73 +94,168 @@ const highlights = [
 </script>
 
 <template>
-	<main ref="root" class="portfolio-home">
-		<section class="hero-shell" data-hero>
-			<div class="hero-panel container" data-hero-panel>
+	<main
+		ref="root"
+		class="portfolio-home"
+	>
+		<section
+			class="hero-shell"
+			data-hero
+		>
+			<div
+				class="hero-panel container"
+				data-hero-panel
+			>
 				<div class="hero-copy">
-					<p class="kicker" data-reveal>Azure AI Solution Engineer / Software Developer</p>
+					<p
+						class="kicker"
+						data-reveal
+					>
+						Azure AI Solution Engineer / Software Developer
+					</p>
 					<h1 data-reveal>Antonio Supan</h1>
-					<p class="hero-lede" data-reveal>
+					<p
+						class="hero-lede"
+						data-reveal
+					>
 						Software engineer with 7 years of experience delivering enterprise,
-						public-sector and financial systems across full-stack .NET, SQL, APIs
-						and Azure, with a practical focus on AI automation and reliable
+						public-sector and financial systems across full-stack .NET, SQL,
+						APIs and Azure, with a practical focus on AI automation and reliable
 						production workflows.
 					</p>
-					<div class="hero-actions" data-reveal>
-						<a href="#contact" class="btn btn-primary">Start a conversation</a>
-						<a href="/assets/cv.pdf" target="_blank" rel="noopener noreferrer" class="btn">Download CV</a>
+					<div
+						class="hero-actions"
+						data-reveal
+					>
+						<a
+							href="#contact"
+							class="btn btn-primary"
+							>Start a conversation</a
+						>
+						<a
+							href="/assets/cv.pdf"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn"
+							>Download CV</a
+						>
 					</div>
 				</div>
 
-				<div class="hero-visual" data-reveal>
-					<div class="cv-mark" aria-hidden="true">AS</div>
-					<div class="profile-frame" data-parallax-profile>
-						<img src="/assets/profile.jpg" alt="Antonio Supan" />
+				<div
+					class="hero-visual"
+					data-reveal
+				>
+					<div
+						class="cv-mark"
+						aria-hidden="true"
+					>
+						AS
+					</div>
+					<div
+						class="profile-frame"
+						data-parallax-profile
+					>
+						<img
+							src="/assets/profile.jpg"
+							alt="Antonio Supan"
+						/>
 					</div>
 					<div class="status-card">
 						<span>Current role</span>
-						<strong>COMBIS - AI & Automation Lead</strong>
+						<strong>COMBIS - AI & Automation Developer</strong>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<section id="about" class="positioning-section" data-section>
+		<section
+			id="about"
+			class="positioning-section"
+			data-section
+		>
 			<div class="container">
 				<div class="section-heading">
-					<p class="section-kicker" data-section-reveal>Positioning</p>
-					<h2 data-section-reveal>Azure, AI and software delivery that survives production.</h2>
+					<p
+						class="section-kicker"
+						data-section-reveal
+					>
+						Positioning
+					</p>
+					<h2 data-section-reveal>
+						Azure, AI and software delivery that survives production.
+					</h2>
 				</div>
 				<div class="metrics-grid">
-					<article v-for="metric in metrics" :key="metric.label" class="metric-card" data-section-reveal>
+					<article
+						v-for="metric in metrics"
+						:key="metric.label"
+						class="metric-card"
+						data-section-reveal
+					>
 						<strong>{{ metric.value }}</strong>
 						<span>{{ metric.label }}</span>
 					</article>
 				</div>
-				<div class="focus-strip" data-section-reveal>
-					<span v-for="area in focusAreas" :key="area">{{ area }}</span>
+				<div
+					class="focus-strip"
+					data-section-reveal
+				>
+					<span
+						v-for="area in focusAreas"
+						:key="area"
+						>{{ area }}</span
+					>
 				</div>
 			</div>
 		</section>
 
-		<section id="experience" class="experience-section" data-section data-experience>
+		<section
+			id="experience"
+			class="experience-section"
+			data-section
+			data-experience
+		>
 			<div class="container experience-layout">
 				<div class="section-heading sticky-heading">
-					<p class="section-kicker" data-section-reveal>Experience</p>
-					<h2 data-section-reveal>Enterprise delivery, integrations and automation leadership.</h2>
+					<p
+						class="section-kicker"
+						data-section-reveal
+					>
+						Experience
+					</p>
+					<h2 data-section-reveal>
+						Enterprise delivery, integrations and automation leadership.
+					</h2>
 				</div>
 				<div class="timeline">
-					<div class="timeline-track" aria-hidden="true">
-						<div class="timeline-progress" data-timeline-progress></div>
+					<div
+						class="timeline-track"
+						aria-hidden="true"
+					>
+						<div
+							class="timeline-progress"
+							data-timeline-progress
+						></div>
 					</div>
-					<article v-for="job in jobs" :key="job.company + job.period" class="job-card" :class="{ current: job.current }" data-section-reveal>
+					<article
+						v-for="job in jobs"
+						:key="job.company + job.period"
+						class="job-card"
+						:class="{ current: job.current }"
+						data-section-reveal
+					>
 						<div class="job-period">{{ job.period }}</div>
 						<div>
 							<h3>{{ job.company }}</h3>
 							<p class="job-title">{{ job.title }}</p>
 							<p>{{ job.body }}</p>
 							<div class="tag-list">
-								<span v-for="tag in job.tags" :key="tag">{{ tag }}</span>
+								<span
+									v-for="tag in job.tags"
+									:key="tag"
+									>{{ tag }}</span
+								>
 							</div>
 						</div>
 					</article>
@@ -162,14 +263,29 @@ const highlights = [
 			</div>
 		</section>
 
-		<section id="technical" class="technical-section" data-section>
+		<section
+			id="technical"
+			class="technical-section"
+			data-section
+		>
 			<div class="container">
 				<div class="section-heading">
-					<p class="section-kicker" data-section-reveal>Technical areas</p>
-					<h2 data-section-reveal>Full-stack engineering with an automation spine.</h2>
+					<p
+						class="section-kicker"
+						data-section-reveal
+					>
+						Technical areas
+					</p>
+					<h2 data-section-reveal>
+						Full-stack engineering with an automation spine.
+					</h2>
 				</div>
 				<div class="technical-grid">
-					<article v-for="area in technicalAreas" :key="area.title" data-section-reveal>
+					<article
+						v-for="area in technicalAreas"
+						:key="area.title"
+						data-section-reveal
+					>
 						<h3>{{ area.title }}</h3>
 						<p>{{ area.text }}</p>
 					</article>
@@ -177,14 +293,29 @@ const highlights = [
 			</div>
 		</section>
 
-		<section id="impact" class="impact-section" data-section>
+		<section
+			id="impact"
+			class="impact-section"
+			data-section
+		>
 			<div class="container impact-layout">
 				<div class="section-heading">
-					<p class="section-kicker" data-section-reveal>Project highlights</p>
-					<h2 data-section-reveal>Work across public systems, enterprise clients and AI automation.</h2>
+					<p
+						class="section-kicker"
+						data-section-reveal
+					>
+						Project highlights
+					</p>
+					<h2 data-section-reveal>
+						Work across public systems, enterprise clients and AI automation.
+					</h2>
 				</div>
 				<div class="highlight-list">
-					<article v-for="(highlight, index) in highlights" :key="highlight" data-section-reveal>
+					<article
+						v-for="(highlight, index) in highlights"
+						:key="highlight"
+						data-section-reveal
+					>
 						<span>{{ String(index + 1).padStart(2, "0") }}</span>
 						<p>{{ highlight }}</p>
 					</article>
@@ -210,7 +341,12 @@ const highlights = [
 	margin: 0;
 	background:
 		linear-gradient(90deg, rgba(48, 80, 100, 0.94) 0 11vw, transparent 11vw),
-		linear-gradient(132deg, transparent 0 55%, rgba(0, 173, 213, 0.18) 55% 66%, transparent 66%),
+		linear-gradient(
+			132deg,
+			transparent 0 55%,
+			rgba(0, 173, 213, 0.18) 55% 66%,
+			transparent 66%
+		),
 		var(--color-paper);
 }
 
@@ -532,7 +668,11 @@ const highlights = [
 		min-height: auto;
 		padding-bottom: 5rem;
 		background:
-			linear-gradient(180deg, rgba(48, 80, 100, 0.95) 0 8.5rem, transparent 8.5rem),
+			linear-gradient(
+				180deg,
+				rgba(48, 80, 100, 0.95) 0 8.5rem,
+				transparent 8.5rem
+			),
 			var(--color-paper);
 	}
 
