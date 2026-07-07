@@ -10,6 +10,8 @@ const navItems = [
   { href: '/', icon: 'home', label: 'Home' },
   { href: '/#about', icon: 'user', label: 'About' },
   { href: '/#experience', icon: 'briefcase', label: 'Work' },
+  { href: '/#technical', icon: 'code', label: 'Tech' },
+  { href: '/#impact', icon: 'spark', label: 'Impact' },
   { href: '/#testimonials', icon: 'quote', label: 'Reviews' },
   { href: '/blog', icon: 'book', label: 'Blog' },
   { href: '/#contact', icon: 'mail', label: 'Contact' }
@@ -33,7 +35,7 @@ const handleScroll = () => {
     return
   }
 
-  const sections = ['about', 'experience', 'testimonials', 'contact']
+  const sections = ['about', 'experience', 'technical', 'impact', 'testimonials', 'contact']
   const scrollY = window.scrollY + 200
 
   for (const section of sections) {
@@ -97,6 +99,14 @@ onUnmounted(() => {
             <svg v-else-if="item.icon === 'book'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <svg v-else-if="item.icon === 'code'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <svg v-else-if="item.icon === 'spark'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6L12 3z"></path>
+              <path d="M5 17l.8 2.2L8 20l-2.2.8L5 23l-.8-2.2L2 20l2.2-.8L5 17z"></path>
             </svg>
             <!-- Quote Icon -->
             <svg v-else-if="item.icon === 'quote'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

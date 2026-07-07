@@ -26,7 +26,7 @@ const socials = [
             <span class="logo-text">SUPAN</span>
             <span class="logo-dot"></span>
           </a>
-          <p class="tagline">Fullstack Engineer crafting digital experiences</p>
+          <p class="tagline">Azure AI Solution Engineer / Software Developer building reliable automation and enterprise systems.</p>
         </div>
 
         <!-- Navigation -->

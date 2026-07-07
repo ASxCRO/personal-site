@@ -1,27 +1,11 @@
 ---
-title: Antonio Supan - Fullstack Engineer
-description: Personal portfolio and blog of Antonio Supan, a Fullstack Engineer specializing in .NET, Vue.js, and cloud technologies.
+title: Antonio Supan - Azure AI Solution Engineer / Software Developer
+description: Portfolio of Antonio Supan, an Azure AI Solution Engineer and Software Developer specializing in .NET, APIs, integrations, Azure, DevOps and AI automation.
 layout: page
 ---
 
 <script setup>
-import Header from './.vitepress/theme/components/Header.vue'
-import About from './.vitepress/theme/components/About.vue'
-import Experience from './.vitepress/theme/components/Experience.vue'
-import Testimonials from './.vitepress/theme/components/Testimonials.vue'
-import Contact from './.vitepress/theme/components/Contact.vue'
-import Newsletter from './.vitepress/theme/components/Newsletter.vue'
+import PortfolioHome from './.vitepress/theme/components/PortfolioHome.vue'
 </script>
 
-<Header />
-<About />
-<Experience />
-<Testimonials />
-
-<section class="mt-32">
-  <div class="container">
-    <Newsletter />
-  </div>
-</section>
-
-<Contact />
+<PortfolioHome />
