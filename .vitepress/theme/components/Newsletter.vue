@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-// Replace with your Buttondown username
 const BUTTONDOWN_USERNAME = "supan";
+const BUTTONDOWN_SUBSCRIBE_URL = `https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`;
 
 const email = ref("");
 const status = ref<"idle" | "loading" | "success" | "error">("idle");
 const errorMessage = ref("");
 
 const subscribe = async () => {
-	if (!email.value || !email.value.includes("@")) {
+	const subscriberEmail = email.value.trim();
+
+	if (!subscriberEmail || !subscriberEmail.includes("@")) {
 		status.value = "error";
 		errorMessage.value = "Please enter a valid email address";
 		return;
@@ -19,57 +21,36 @@ const subscribe = async () => {
 	errorMessage.value = "";
 
 	try {
-		// Buttondown API integration
-		const response = await fetch(
-			`https://api.buttondown.email/v1/subscribers`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email: email.value,
-					tags: ["website"],
-				}),
-			}
-		);
+		// Use Buttondown's public embed endpoint. The /v1/subscribers API
+		// requires a private API token and must not be called from a browser.
+		const response = await fetch(BUTTONDOWN_SUBSCRIBE_URL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+			body: JSON.stringify({
+				email: subscriberEmail,
+				tag: "website",
+				embed: "1",
+			}),
+		});
 
-		if (response.ok || response.status === 201) {
+		if (response.ok) {
 			status.value = "success";
 			email.value = "";
 		} else {
-			const data = await response.json();
-			if (response.status === 409) {
-				// Already subscribed
-				status.value = "success";
-				email.value = "";
-			} else {
-				throw new Error(data.detail || "Something went wrong");
-			}
+			const data = await response.json().catch(() => null);
+			throw new Error(
+				data?.detail || data?.message || "Subscription failed. Please try again."
+			);
 		}
 	} catch (error) {
-		// Fallback to form submission for CORS
-		// Buttondown form endpoint doesn't require API key
-		const formData = new FormData();
-		formData.append("email", email.value);
-
-		try {
-			await fetch(
-				`https://buttondown.email/api/emails/${BUTTONDOWN_USERNAME}`,
-				{
-					method: "POST",
-					body: formData,
-					mode: "no-cors", // Required for form submission
-				}
-			);
-
-			// With no-cors, we can't read the response, but the request goes through
-			status.value = "success";
-			email.value = "";
-		} catch (e) {
-			status.value = "error";
-			errorMessage.value = "Failed to subscribe. Please try again.";
-		}
+		status.value = "error";
+		errorMessage.value =
+			error instanceof Error
+				? error.message
+				: "Failed to subscribe. Please try again.";
 	}
 
 	if (status.value === "success") {
