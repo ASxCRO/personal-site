@@ -23,27 +23,25 @@ const subscribe = async () => {
 	try {
 		// Use Buttondown's public embed endpoint. The /v1/subscribers API
 		// requires a private API token and must not be called from a browser.
+		const formData = new URLSearchParams({
+			email: subscriberEmail,
+			tag: "website",
+			embed: "1",
+		});
+
 		const response = await fetch(BUTTONDOWN_SUBSCRIBE_URL, {
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
+				"Content-Type": "application/x-www-form-urlencoded",
 			},
-			body: JSON.stringify({
-				email: subscriberEmail,
-				tag: "website",
-				embed: "1",
-			}),
+			body: formData,
 		});
 
 		if (response.ok) {
 			status.value = "success";
 			email.value = "";
 		} else {
-			const data = await response.json().catch(() => null);
-			throw new Error(
-				data?.detail || data?.message || "Subscription failed. Please try again."
-			);
+			throw new Error("Subscription failed. Please try again.");
 		}
 	} catch (error) {
 		status.value = "error";
