@@ -1,12 +1,14 @@
 ---
-title: "Microsoft Foundry in 2026: What Changed for .NET Engineers Building Real AI Agents"
-date: 2026-07-07
-description: "Practical commentary on Microsoft Foundry, AI Projects SDK 2.x, Foundry Agent Service, and Microsoft Agent Framework from a .NET/Azure engineering perspective."
+title: "Microsoft Foundry in 2026: Choosing the Right Layer for a .NET Agent"
+date: 2026-09-07
+description: "A source-backed guide to choosing Microsoft Foundry, Foundry Agent Service, and Microsoft Agent Framework for a .NET workload."
 tags: ["Microsoft Foundry", "Azure AI", "AI Agents", ".NET", "Agent Framework"]
 author: "Antonio Supan"
+featured: true
+lastVerified: 2026-09-07
 ---
 
-# Microsoft Foundry in 2026: What Changed for .NET Engineers Building Real AI Agents
+# Microsoft Foundry in 2026: Choosing the Right Layer for a .NET Agent
 
 Microsoft's AI platform story is finally becoming easier to reason about, but only if you stop looking at it as "a portal for prompts".
 
@@ -14,7 +16,7 @@ The shift in 2026 is bigger than a rename from Azure AI Foundry to Microsoft Fou
 
 That matters if you build .NET systems for real users. Demos can survive with one prompt, one API key, and a happy path. Production systems need identity, RBAC, observability, versioning, evaluation, network boundaries, rollout discipline, and a way to explain what the agent did after something goes wrong.
 
-This is my practical read of the current direction.
+This is an architecture guide, not a claim that one platform choice fits every workload. Product availability and APIs change quickly; the linked Microsoft documentation is the source of truth and was checked on 7 September 2026.
 
 ## 1. The naming shift: Azure AI Foundry to Microsoft Foundry
 
@@ -60,67 +62,15 @@ That means:
 
 If the agent is only a small helper inside one application, a full hosted agent may be more platform than you need. But if the agent is a business workflow, Foundry Agent Service is the direction to watch.
 
-## 3. AI Projects SDK 2.x is the new project-level developer surface
+## 3. The Microsoft Foundry SDK is the project-level developer surface
 
-The SDK story has been messy for a while, especially if you were following previews. The important consolidation is around project-level SDKs.
+The SDK story has changed quickly, especially for teams that followed previews. The important consolidation is a project client against one Foundry project endpoint. In .NET, `Azure.AI.Projects` provides `AIProjectClient`; use `Azure.Identity` and `DefaultAzureCredential` for keyless authentication where the deployment supports it.
 
-For .NET, the packages to understand are:
+Use the project client for Foundry-native resources such as connections, model deployments, datasets and agent administration. Use the documented OpenAI-compatible client or REST API for model inference and Responses API calls. Do not copy package names or API snippets from older blog posts into a production repository: pin the exact package version, record the API version, and follow the SDK reference for that version.
 
-```bash
-dotnet add package Azure.AI.Projects
-dotnet add package Azure.AI.Projects.Agents
-dotnet add package Azure.AI.Extensions.OpenAI
-dotnet add package Azure.Identity
-```
+The architectural implication is larger than the API call. The application connects to a Foundry project that carries access boundaries and platform configuration, rather than treating a model deployment as an ungoverned endpoint.
 
-For Python, the equivalent direction is:
-
-```bash
-pip install "azure-ai-projects>=2.0.0"
-```
-
-The conceptual model is more important than the package list. The Foundry SDK exposes project APIs through a single project endpoint:
-
-```text
-https://<resource-name>.services.ai.azure.com/api/projects/<project-name>
-```
-
-From that project, you use two kinds of clients:
-
-- A project client for Foundry-native operations, such as project configuration, connections, tracing, evaluations, and other operations that do not map cleanly to OpenAI APIs.
-- An OpenAI-compatible client for model calls, Responses API usage, agents, evaluations, and patterns that are intentionally shaped like OpenAI request/response flows.
-
-That split is healthy. It says: use Azure project semantics when you are managing Azure project resources, and use OpenAI-compatible semantics when you are running model/agent interactions.
-
-A conceptual .NET example looks like this:
-
-```csharp
-using Azure.AI.Projects;
-using Azure.AI.Extensions.OpenAI;
-using Azure.Identity;
-
-var endpoint = new Uri(
-    "https://my-foundry-resource.services.ai.azure.com/api/projects/my-project");
-
-AIProjectClient projectClient = new(
-    endpoint: endpoint,
-    tokenProvider: new DefaultAzureCredential());
-
-var responses = projectClient
-    .ProjectOpenAIClient
-    .GetProjectResponsesClientForModel("gpt-5.2");
-
-var response = responses.CreateResponse(
-    "Summarize the production risks of this agent design.");
-
-Console.WriteLine(response.GetOutputText());
-```
-
-The code is small, but the architectural implication is large: your application is no longer just pointing at an isolated model deployment. It is connecting to a Foundry project that can carry models, tools, and platform configuration.
-
-One package warning matters in .NET: do not mix old preview `Azure.AI.Projects.OpenAI` usage with the newer `Azure.AI.Extensions.OpenAI` package. Microsoft calls out ambiguous type issues when both are installed. That kind of detail is boring until it burns half a day in a migration branch.
-
-My practical advice: when upgrading, treat AI SDK package versions as an architecture change, not a casual NuGet refresh. Lock versions, migrate one surface at a time, and remove preview packages intentionally.
+When upgrading from hub-based projects or preview packages, first inventory the endpoint, package versions, agent API and portal features in use. Microsoft states that new investment is focused on Foundry projects; older hub-based projects remain in the classic experience. Plan the migration in a branch, run integration tests against a non-production project, then remove superseded packages deliberately.
 
 ## 4. Microsoft Agent Framework is the code-first orchestration layer
 
@@ -153,7 +103,7 @@ Agent Framework is also where multi-agent work becomes less mystical. The value 
 
 That separation lets you test and observe the workflow more clearly than a single giant prompt trying to do everything.
 
-My current mental model is:
+The useful mental model is:
 
 Use Agent Framework when the agent is software, not configuration.
 
@@ -163,7 +113,7 @@ If you need branching, memory, typed workflow steps, middleware, cross-provider 
 
 The current Microsoft stack makes more sense when you stop asking "which one replaces which?" and start asking "which layer owns which responsibility?"
 
-Use **AI Projects SDK / Foundry SDK** when you need project access:
+Use **the Foundry SDK** when you need project access:
 
 - Project endpoint configuration
 - Connections
@@ -201,8 +151,8 @@ The mistake is trying to make one layer do every job. A mature architecture will
 
 For example:
 
-- `Azure.AI.Projects` creates the project-level client.
-- The OpenAI-compatible client calls the Responses API.
+- The Foundry SDK creates the project-level client.
+- A documented OpenAI-compatible client calls the Responses API.
 - Foundry Agent Service hosts the agent and gives operations teams visibility.
 - Agent Framework handles orchestration logic that is too important to hide in prompt configuration.
 
@@ -252,14 +202,14 @@ This is the engineering work that separates prototypes from production.
 
 ## Conclusion
 
-My read is that Microsoft Foundry is becoming less "one more AI portal" and more the Azure control plane for production AI apps.
+Microsoft Foundry is becoming less "one more AI portal" and more the Azure control plane for production AI apps.
 
 That is a good direction. Enterprise AI does not fail only because models hallucinate. It fails because nobody knows who owns the agent, which version is running, what tools it can call, why it made a decision, how much it costs, or how to roll it back.
 
 The winning pattern is not to throw agents at every workflow. The winning pattern is disciplined software engineering around agents:
 
 - Put platform concerns in Foundry.
-- Put project access through the AI Projects SDK.
+- Put project access through the Foundry SDK.
 - Put hosted lifecycle into Foundry Agent Service when the agent needs governance.
 - Put orchestration into Agent Framework when the workflow is real application logic.
 
@@ -269,11 +219,8 @@ That is where the interesting work starts.
 
 ## Sources and further reading
 
-- [Microsoft Foundry: What's new](https://learn.microsoft.com/en-us/azure/foundry/whats-new-foundry)
-- [Microsoft Foundry SDKs and Endpoints](https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview)
+- [What is Microsoft Foundry?](https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-ai-foundry)
+- [Azure AI Projects client library for .NET](https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.projects-readme?view=azure-dotnet)
 - [What is Microsoft Foundry Agent Service?](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
 - [Microsoft Agent Framework overview](https://learn.microsoft.com/en-us/agent-framework/overview/)
-- [Microsoft Foundry May 2026 update](https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-may-2026/)
-- [Microsoft Agent Framework version 1.0 announcement](https://devblogs.microsoft.com/agent-framework/microsoft-agent-framework-version-1-0/)
-- [New Microsoft Foundry portal GA overview](https://learn.microsoft.com/en-us/azure/foundry/concepts/general-availability)
-- [Azure SDK Release: April 2026](https://devblogs.microsoft.com/azure-sdk/azure-sdk-release-april-2026/)
+- [Foundry Agent Service: agent types and operations](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)

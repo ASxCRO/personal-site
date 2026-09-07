@@ -12,7 +12,7 @@ layout: page
 <span class="section-eyebrow">Articles & Insights</span>
 <h1 class="page-title">Blog</h1>
 <p class="page-description">
-Deep dives into .NET, software architecture, cloud technologies, and modern development practices. Practical insights from real-world experience.
+Source-backed notes on .NET, Azure, DevOps, and AI infrastructure. Each article states its scope, trade-offs, and verification date.
 </p>
 </div>
 <div class="header-decoration">

@@ -8,6 +8,7 @@ export interface Post {
     description: string
     tags: string[]
     author?: string
+    featured?: boolean
   }
 }
 
@@ -19,6 +20,9 @@ export default createContentLoader('blog/*.md', {
     return rawData
       .filter(page => page.frontmatter.title)
       .sort((a, b) => {
+        if (Boolean(a.frontmatter.featured) !== Boolean(b.frontmatter.featured)) {
+          return a.frontmatter.featured ? -1 : 1
+        }
         return +new Date(b.frontmatter.date) - +new Date(a.frontmatter.date)
       })
       .map(page => ({

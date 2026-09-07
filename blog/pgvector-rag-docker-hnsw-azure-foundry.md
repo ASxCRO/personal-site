@@ -1,18 +1,21 @@
 ---
-title: "From Documents to Semantic Search: pgvector, HNSW, and Azure AI Foundry"
-date: 2026-07-17
-description: "A practical guide to the RAG pipeline: pgvector in Docker, cosine distance, chunking, embedding models in Azure AI Foundry, ingestion, and HNSW indexing."
-tags: ["PostgreSQL", "pgvector", "RAG", "Azure AI Foundry", "Embeddings"]
+title: "A Practical RAG Baseline with pgvector, HNSW, and Microsoft Foundry"
+date: 2026-09-07
+description: "A source-backed, runnable local baseline for document retrieval with pgvector, HNSW, and embeddings from Microsoft Foundry."
+tags: ["PostgreSQL", "pgvector", "RAG", "Microsoft Foundry", "Embeddings"]
 author: "Antonio Supan"
+lastVerified: 2026-09-07
 ---
 
-# From Documents to Semantic Search: pgvector, HNSW, and Azure AI Foundry
+# A Practical RAG Baseline with pgvector, HNSW, and Microsoft Foundry
 
 Traditional SQL search works great when we know exactly what we are looking for: a user ID, an order date, or an exact product name. The problem begins when a user asks, **"How can I cancel my contract before it expires?"**, while the document contains the sentence **"Early termination of the subscription agreement is possible under..."**
 
 The words are different, but the meaning is the same. This is where embedding models and vector search come in.
 
-In this post, we will put the entire picture together:
+This guide provides a local development baseline, not benchmark results. The commands and SQL are intended to be run as shown; latency and recall must still be measured against the documents and questions from the intended application. Product references were checked on 7 September 2026.
+
+The pipeline has six steps:
 
 1. split a document into smaller pieces called chunks
 2. send each chunk to an embedding model in Azure AI Foundry
@@ -101,6 +104,7 @@ Suppose we deployed an embedding model in Azure AI Foundry and selected an outpu
 ```sql
 CREATE TABLE document_chunks (
     id              bigserial PRIMARY KEY,
+    tenant_id       uuid NOT NULL,
     document_id     uuid NOT NULL,
     chunk_index     integer NOT NULL,
     content         text NOT NULL,
@@ -110,13 +114,16 @@ CREATE TABLE document_chunks (
     embedding_model text NOT NULL,
     embedding       vector(1536) NOT NULL,
     created_at      timestamptz NOT NULL DEFAULT now(),
-    UNIQUE (document_id, chunk_index)
+    UNIQUE (tenant_id, document_id, chunk_index)
 );
+
+CREATE INDEX ix_document_chunks_tenant_id
+ON document_chunks (tenant_id);
 ```
 
 The dimension in `vector(1536)` is not arbitrary. It must match the model configuration. If we change the model or its dimensions, it is safer to create a new column or table and re-embed the documents than to silently mix two incompatible vector spaces.
 
-The `metadata` column is useful for flexible data, but frequently filtered values such as `tenant_id`, `document_id`, or a security classification are better stored in dedicated, indexed columns.
+The `metadata` column is useful for flexible data, but frequently filtered values such as `tenant_id`, `document_id`, or a security classification belong in dedicated, indexed columns. The schema now contains `tenant_id` because every retrieval query below filters on it.
 
 ## Cosine distance
 
@@ -253,9 +260,9 @@ Tables, code, and lists need special treatment. A table often needs to be conver
 
 Chunking parameters are not constants that we guess once. They are part of the evaluation process.
 
-## Embedding models in Azure AI Foundry
+## Embedding models in Microsoft Foundry
 
-Azure AI Foundry provides a central place to discover and deploy models, manage access, and connect them to Azure applications. For embeddings, we can select a model from the available catalog and create a deployment, for example using a model from the `text-embedding-3` family.
+Microsoft Foundry provides a central place to discover and deploy models, manage access, and connect them to Azure applications. For embeddings, select a model from the available catalog and create a deployment, for example from the `text-embedding-3` family.
 
 When selecting a model, we consider:
 
@@ -268,13 +275,14 @@ When selecting a model, we consider:
 
 A larger embedding does not automatically create a better system. More dimensions require more database storage, a larger HNSW index, more memory, and more expensive searches. The model should be evaluated against real user questions, including the Croatian language and the application's specialist terminology when relevant.
 
-A conceptual call to the embedding endpoint looks like this:
+A request to the current Foundry Models REST surface uses the OpenAI v1 path:
 
 ```http
-POST {foundry-endpoint}/openai/deployments/{deployment}/embeddings?api-version={api-version}
+POST {endpoint}/openai/v1/embeddings
 Content-Type: application/json
 
 {
+  "model": "your-embedding-deployment",
   "input": [
     "Heading: Early termination\nThe customer may terminate the contract..."
   ],
@@ -282,7 +290,7 @@ Content-Type: application/json
 }
 ```
 
-The exact endpoint and supported parameters depend on the deployment type and API version. We keep them in application configuration, and we should prefer Microsoft Entra ID and managed identities for authentication instead of hardcoded keys.
+`dimensions` is supported by `text-embedding-3` and later models. Keep the endpoint, deployment name and API version in application configuration. Prefer Microsoft Entra ID and managed identities over hardcoded keys where the deployment supports it.
 
 Batching multiple chunks into one request reduces overhead, but we must respect input and request limits. The pipeline needs retries with backoff for transient failures and controlled concurrency so it does not continuously hit rate limits.
 
@@ -365,7 +373,7 @@ If retrieval does not find the right chunk, a larger LLM will not magically solv
 
 ## Conclusion
 
-pgvector makes sense because it brings vector search into a database that many teams already understand. The Docker image provides a fast, repeatable local setup. Cosine distance turns semantic similarity into a sorted SQL result. HNSW allows the same principle to remain fast over a larger number of chunks. Azure AI Foundry provides a managed embedding model, identity, quotas, and a place to operate model deployments.
+pgvector makes sense because it brings vector search into a database that many teams already understand. The Docker image provides a fast, repeatable local setup. Cosine distance turns semantic similarity into a sorted SQL result. HNSW allows the same principle to remain fast over a larger number of chunks. Microsoft Foundry provides managed embedding deployments, identity options, quotas and an operating surface for model deployments.
 
 Still, the most important part is not any individual technology. The value comes from a well-designed ingestion and retrieval pipeline:
 
@@ -377,3 +385,11 @@ Still, the most important part is not any individual technology. The value comes
 - version the model and pipeline parameters
 
 At that point, RAG stops being a magical AI trick. It becomes a regular, understandable data system: a document goes in, relevant context comes out, and the model receives enough verifiable facts to compose a useful answer.
+
+## Sources and further reading
+
+- [pgvector: exact search, distance operators and HNSW](https://github.com/pgvector/pgvector)
+- [pgvector Docker image](https://hub.docker.com/r/pgvector/pgvector)
+- [Microsoft Foundry embeddings REST reference](https://learn.microsoft.com/en-us/rest/api/aifoundry/azureopenai/embeddings)
+- [What is Microsoft Foundry?](https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-ai-foundry)
+- [PostgreSQL `CREATE INDEX` reference](https://www.postgresql.org/docs/current/sql-createindex.html)
